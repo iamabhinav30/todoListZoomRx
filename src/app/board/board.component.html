@@ -1,0 +1,75 @@
+<div class="boardList container-fluid">
+  <h1>Todo Lists</h1>
+  <div cdkDropList class="" (cdkDropListDropped)="drop($event)">
+    <div class="row">
+      <div class="list-item" *ngFor="let list of lists, index as i" cdkDrag>
+        <div class="col-md-12 ">
+          <div class="drag-index col-md-7 listHead">List {{i+1}}</div>
+          <div class="drag-index col-md-5 deleteItem">
+            <button (click)="delete(i)">
+              Delete this list
+            </button>
+          </div>
+        </div>
+        <div class=" col-md-12 card" id="{{i}}_card_{{j}}" *ngFor="let card of list.cards, index as j"
+          (click)="showModalCard(j)" cdkDrag>
+          <div class="cardBlock">
+            <div>Card {{j+1}}</div>
+          </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal modalBody" [ngStyle]="{'display':display}" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+              <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="onCloseHandled()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="container-fluid">
+                  <form class="form" [formGroup]="cardForm" (ngSubmit)="onSubmit(cardForm, i)">
+                    <div class="form-group">
+                      <label>Card title</label>
+                      <div class="row">
+                        <input type="text" class="form-control col-md-8" placeholder="Card description"
+                          formControlName="cardTitle" name="cardTitle">
+                        <button (click)="deleteCard(i)" class="col-md-4 deleteCard">Delete Card</button>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+
+                      <textarea type="textarea" class="form-control" formControlName="comments" name="comments">
+
+                      </textarea>
+                    </div>
+
+
+                    <button type="submit" [disabled]="cardForm.invalid" class="btn btn-light row">
+                      Add Comment
+                    </button>
+                  </form>
+
+                  <div class="col-md-12 commentsList" *ngFor="let card of list.cards, index as j">
+                    <div class="row">
+                      <div class="col-md-6">{{card.comments}}</div>
+                      <div class="col-md-6">{{card.currentDate  | date:'yyyy-MM-dd'}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button (click)="addNewCard(i)" class="newCard">
+          Add new card...
+        </button>
+        <!-- <div class="clear-fix"></div> -->
+      </div>
+      <div class="col-md-2">
+        <button class="newList" (click)="addNew()">
+          Add New list...
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
